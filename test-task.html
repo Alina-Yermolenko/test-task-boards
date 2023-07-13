@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+	.box {
+		width: 100px;
+		height: 100px;
+		border: 1px solid black;
+		text-align: center;
+		line-height: 100px;
+		margin-bottom: 10px;
+	}
+	</style>
+</head>
+
+<body>
+	<div id='parent'></div>
+	<script>
+	const originalOrder = [];
+	const parent = document.getElementById("parent");
+
+	function moveDivToTop(event) {
+		const div = event.target;
+		const currentIndex = Array.from(parent.children).indexOf(div);
+		const originalIndex = originalOrder.indexOf(div);
+		let currentOrder = () => {
+			return Array.from(parent.children).map(function(div) {
+				return div;
+			});
+		}
+		if(originalIndex === 0) {
+			parent.insertBefore(div, parent.firstChild);
+		} else if(div.classList.contains("moved")) {
+			const referenceNode = currentOrder()[originalIndex + 1];
+			parent.insertBefore(div, referenceNode);
+			div.classList.remove("moved");
+		} else if(currentIndex !== 0) {
+			parent.insertBefore(div, parent.firstChild);
+			div.classList.add("moved");
+		}
+	}
+	for(let i = 1; i <= 100; i++) {
+		const div = document.createElement("div");
+		div.className = "box";
+		div.innerText = "div" + i;
+		div.addEventListener("click", moveDivToTop);
+		parent.appendChild(div);
+		originalOrder.push(div);
+	}
+	</script>
+</body>
+
+</html>
